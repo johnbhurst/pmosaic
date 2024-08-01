@@ -1,1 +1,3 @@
+*.log.20*
+bin/__pycache__/
 venv/
