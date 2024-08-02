@@ -16,7 +16,7 @@ parser.add_argument("files", nargs="+", help="Image files to process.")
 args = parser.parse_args()
 
 pmosaic.setup_logging(level=logging.DEBUG if args.debug else logging.INFO)
-with open(args.libfile, "w") as f:
+with open(args.libfile, "a") as f:
     for i, filename in enumerate(args.files):
         logging.info(f"Processing {filename}")
         with Image.open(filename) as image:
