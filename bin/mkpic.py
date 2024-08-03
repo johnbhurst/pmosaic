@@ -30,10 +30,10 @@ with Image.open(args.file) as image:
     new_image = Image.new("RGB", (args.imagesize, args.imagesize))
     num_tiles = args.imagesize // args.tilesize
     cellsize = image.width // num_tiles
-    for y in range(num_tiles):
-        logging.info(f"Processing row {y}")
-        for x in range(num_tiles):
-            cell = image.crop((x * cellsize, y * cellsize, (x + 1) * cellsize, (y + 1) * cellsize))
+    for row in range(num_tiles):
+        logging.info(f"Processing row {row}")
+        for col in range(num_tiles):
+            cell = image.crop((col * cellsize, row * cellsize, (col + 1) * cellsize, (row + 1) * cellsize))
             best_match = pmosaic.best_match(cell, library)
             tile = Image.open(best_match["filename"])
             if tile.width > tile.height:
@@ -41,6 +41,6 @@ with Image.open(args.file) as image:
             elif tile.height > tile.width:
                 tile = tile.crop((0, (tile.height - tile.width) // 2, tile.width, (tile.height + tile.width) // 2))
             tile = tile.resize((args.tilesize, args.tilesize))
-            new_image.paste(tile, (x * args.tilesize, y * args.tilesize))
+            new_image.paste(tile, (col * args.tilesize, row * args.tilesize))
     new_filename = args.outfile if args.outfile != "DEFAULT" else f"{os.path.splitext(args.file)[0]}_mosaic{os.path.splitext(args.file)[1]}"
     new_image.save(new_filename)
