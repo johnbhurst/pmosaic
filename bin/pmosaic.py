@@ -25,6 +25,16 @@ def setup_logging(level=logging.INFO):
     logger.addHandler(file_handler)
 
 
+def crop_square(image):
+    width, height = image.size
+    if width > height:
+        return image.crop(((width - height) // 2, 0, (width + height) // 2, height))
+    elif height > width:
+        return image.crop((0, (height - width) // 2, width, (height + width) // 2))
+    else:
+        return image
+
+
 def average_rgb(image):
     pixels = image.load()
     width, height = image.size

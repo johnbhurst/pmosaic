@@ -21,12 +21,8 @@ args = parser.parse_args()
 pmosaic.setup_logging(level=logging.DEBUG if args.debug else logging.INFO)
 library = pmosaic.load_library(args.libfile)
 logging.info(f"Processing {args.file}")
-with Image.open(args.file) as image:
-    width, height = image.size
-    if width > height:
-        image = image.crop(((width - height) // 2, 0, (width + height) // 2, height))
-    elif height > width:
-        image = image.crop((0, (height - width) // 2, width, (height + width) // 2))
+with Image.open(args.file) as file_image:
+    image = pmosaic.crop_square(file_image)
     new_image = Image.new("RGB", (args.imagesize, args.imagesize))
     num_tiles = args.imagesize // args.tilesize
     cellsize = image.width // num_tiles
@@ -35,12 +31,8 @@ with Image.open(args.file) as image:
         for col in range(num_tiles):
             cell = image.crop((col * cellsize, row * cellsize, (col + 1) * cellsize, (row + 1) * cellsize))
             best_match = pmosaic.best_match(cell, library)
-            tile = Image.open(best_match["filename"])
-            if tile.width > tile.height:
-                tile = tile.crop(((tile.width - tile.height) // 2, 0, (tile.width + tile.height) // 2, tile.height))
-            elif tile.height > tile.width:
-                tile = tile.crop((0, (tile.height - tile.width) // 2, tile.width, (tile.height + tile.width) // 2))
-            tile = tile.resize((args.tilesize, args.tilesize))
-            new_image.paste(tile, (col * args.tilesize, row * args.tilesize))
+            with Image.open(best_match["filename"]) as file_tile:
+                tile = pmosaic.crop_square(file_tile).resize((args.tilesize, args.tilesize))
+                new_image.paste(tile, (col * args.tilesize, row * args.tilesize))
     new_filename = args.outfile if args.outfile != "DEFAULT" else f"{os.path.splitext(args.file)[0]}_mosaic{os.path.splitext(args.file)[1]}"
     new_image.save(new_filename)

@@ -19,12 +19,7 @@ pmosaic.setup_logging(level=logging.DEBUG if args.debug else logging.INFO)
 with open(args.libfile, "a") as f:
     for i, filename in enumerate(args.files):
         logging.info(f"Processing {filename}")
-        with Image.open(filename) as image:
-            # crop the image to the middle square portion
-            width, height = image.size
-            if width > height:
-                image = image.crop(((width - height) // 2, 0, (width + height) // 2, height))
-            elif height > width:
-                image = image.crop((0, (height - width) // 2, width, (height + width) // 2))
+        with Image.open(filename) as file_image:
+            image = pmosaic.crop_square(file_image)
             quadrant_colors = pmosaic.average_quadrants(image)
             print(json.dumps({"filename": filename, "quadrant_colors": quadrant_colors}), file=f)
