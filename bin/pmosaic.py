@@ -49,7 +49,7 @@ def average_quadrants(image):
     return {
         "top_left": av_rgb(data[:height_half, :width_half]),
         "top_right": av_rgb(data[:height_half, width_half:]),
-        "bot-Left": av_rgb(data[height_half:, :width_half]),
+        "bot_Left": av_rgb(data[height_half:, :width_half]),
         "bot_right": av_rgb(data[height_half:, width_half:])
     }
 
