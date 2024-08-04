@@ -4,6 +4,7 @@
 # 2024-07-31
 
 import argparse
+import json
 import logging
 import os
 import pmosaic
@@ -19,7 +20,8 @@ parser.add_argument("file", help="Image file to process.")
 args = parser.parse_args()
 
 pmosaic.setup_logging(level=logging.DEBUG if args.debug else logging.INFO)
-library = pmosaic.load_library(args.libfile)
+with open(args.libfile) as f:
+    library = [json.loads(line) for line in f]
 logging.info(f"Processing {args.file}")
 with Image.open(args.file) as file_image:
     image = pmosaic.crop_square(file_image)

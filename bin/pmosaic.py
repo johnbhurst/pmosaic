@@ -4,7 +4,6 @@
 
 import datetime
 import inspect
-import json
 import logging
 import numpy as np
 import os
@@ -52,11 +51,6 @@ def average_quadrants(image):
         "bot_left": average_rgb(data[height_half:, :width_half]),
         "bot_right": average_rgb(data[height_half:, width_half:])
     }
-
-
-def load_library(libfile):
-    with open(libfile) as f:
-        return [json.loads(line) for line in f]
 
 
 def quadrant_colors_distance(qc1, qc2):
