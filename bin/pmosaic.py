@@ -47,10 +47,10 @@ def average_quadrants(image):
     height_half, width_half = height // 2, width // 2
 
     return {
-        "top_left": av_rgb(data[:height_half, :width_half]),
-        "top_right": av_rgb(data[:height_half, width_half:]),
-        "bot_Left": av_rgb(data[height_half:, :width_half]),
-        "bot_right": av_rgb(data[height_half:, width_half:])
+        "top_left": average_rgb(data[:height_half, :width_half]),
+        "top_right": average_rgb(data[:height_half, width_half:]),
+        "bot_left": average_rgb(data[height_half:, :width_half]),
+        "bot_right": average_rgb(data[height_half:, width_half:])
     }
 
 
