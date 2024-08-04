@@ -19,7 +19,11 @@ pmosaic.setup_logging(level=logging.DEBUG if args.debug else logging.INFO)
 with open(args.libfile, "a") as f:
     for i, filename in enumerate(args.files):
         logging.info(f"Processing {filename}")
-        with Image.open(filename) as file_image:
-            image = pmosaic.crop_square(file_image)
-            quadrant_colors = pmosaic.average_quadrants(image)
-            print(json.dumps({"filename": filename, "quadrant_colors": quadrant_colors}), file=f)
+        try:
+            with Image.open(filename) as file_image:
+                image = pmosaic.crop_square(file_image)
+                quadrant_colors = pmosaic.average_quadrants(image)
+                print(json.dumps({"filename": filename, "quadrant_colors": quadrant_colors}), file=f)
+        except Exception as e:
+            logging.error(f"Error processing {filename}: {e}")
+            continue
