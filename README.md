@@ -19,5 +19,3 @@ bin/mklib.py [options] --libfile=library-file.json --outfile=output.jpg image.jp
 ```
 
 `mkpic.py` supports options to control the size and makeup of the output image.
-
-`
