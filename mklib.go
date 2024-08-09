@@ -73,12 +73,15 @@ func main() {
 
 		bounds := img.Bounds()
 		width, height := bounds.Max.X, bounds.Max.Y
-		var imageData ImageData
-		imageData.Filename = arg
-		imageData.QuadrantColors.TopLeft = averageColors(image.Rect(0, 0, width/2, height/2), img)
-		imageData.QuadrantColors.TopRight = averageColors(image.Rect(width/2, 0, width, height/2), img)
-		imageData.QuadrantColors.BottomLeft = averageColors(image.Rect(0, height/2, width/2, height), img)
-		imageData.QuadrantColors.BottomRight = averageColors(image.Rect(width/2, height/2, width, height), img)
+		imageData := ImageData{
+			Filename: arg,
+			QuadrantColors: QuadrantColors{
+				TopLeft:     averageColors(image.Rect(0, 0, width/2, height/2), img),
+				TopRight:    averageColors(image.Rect(width/2, 0, width, height/2), img),
+				BottomLeft:  averageColors(image.Rect(0, height/2, width/2, height), img),
+				BottomRight: averageColors(image.Rect(width/2, height/2, width, height), img),
+			},
+		}
 		if err := encoder.Encode(imageData); err != nil {
 			fmt.Printf("Failed to encode results: %v\n", err)
 			return
