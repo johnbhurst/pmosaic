@@ -1,3 +1,5 @@
+.idea/
 *.log.20*
 bin/__pycache__/
+mklib
 venv/
