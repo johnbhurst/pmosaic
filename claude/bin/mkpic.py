@@ -93,17 +93,19 @@ def compute_input_vectors(input_image, num_x, num_y, grid_model, color_model):
 def place_easter_eggs(easter_eggs, input_vecs, positions, occupied,
                       output_image, tile_size, grid_model, color_model):
     """Place each easter egg exactly once at its best free matching position."""
-    for entry in easter_eggs:
+    total = len(easter_eggs)
+    for index, entry in enumerate(easter_eggs, start=1):
         egg_tiles = entry.get("tiles")
         if not egg_tiles:
-            logging.warning("Easter egg %s has no tiles; skipping", entry.get("filename"))
+            logging.warning("[egg %d/%d] %s has no tiles; skipping",
+                            index, total, entry.get("filename"))
             continue
         tile = egg_tiles[0]
         try:
             egg_vec = np.asarray(tile["color_vecs"][grid_model][color_model], dtype=np.float64)
         except (KeyError, TypeError):
-            logging.warning("Easter egg %s missing %s/%s vector; skipping",
-                            entry.get("filename"), grid_model, color_model)
+            logging.warning("[egg %d/%d] %s missing %s/%s vector; skipping",
+                            index, total, entry.get("filename"), grid_model, color_model)
             continue
 
         best_pos = None
@@ -117,15 +119,16 @@ def place_easter_eggs(easter_eggs, input_vecs, positions, occupied,
                 best_pos = pos
 
         if best_pos is None:
-            logging.warning("No free position for easter egg %s", entry.get("filename"))
+            logging.warning("[egg %d/%d] No free position for %s",
+                            index, total, entry.get("filename"))
             continue
 
         occupied.add(best_pos)
         i, j = best_pos
         tile_image = extract_tile_image(entry, tile, tile_size)
         output_image.paste(tile_image, (i * tile_size, j * tile_size))
-        logging.info("Placed easter egg %s at (%d, %d), distance=%.3f",
-                     entry.get("filename"), i, j, best_distance)
+        logging.info("[egg %d/%d] Placed %s at (%d, %d), distance=%.3f",
+                     index, total, entry.get("filename"), i, j, best_distance)
 
 
 def fill_main(lib_tiles, input_vecs, positions, occupied, use_counts,

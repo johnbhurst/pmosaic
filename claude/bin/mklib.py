@@ -61,14 +61,15 @@ def main(argv=None):
     args = parse_args(argv)
     setup_logging("mklib", debug=args.debug)
 
+    total = len(args.files)
     processed = 0
     failed = 0
-    for filename in args.files:
-        logging.info("Processing %s", filename)
+    for index, filename in enumerate(args.files, start=1):
+        logging.info("[%d/%d] Processing %s", index, total, filename)
         try:
             record = index_file(filename)
         except Exception as exc:
-            logging.error("Error processing %s: %s", filename, exc)
+            logging.error("[%d/%d] Error processing %s: %s", index, total, filename, exc)
             failed += 1
             continue
         library.append_record(args.libfile, record)
