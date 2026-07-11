@@ -15,14 +15,7 @@ if project_root not in sys.path:
 from pmosaic.io import load_image
 from pmosaic.color import extract_grid_vectors
 from pmosaic.utils import crop_to_square, compute_tile_md5
-
-def setup_logging(level_name):
-    level = getattr(logging, level_name.upper(), logging.INFO)
-    logging.basicConfig(
-        level=level,
-        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        handlers=[logging.StreamHandler(sys.stdout)]
-    )
+from pmosaic.logging_setup import setup_logging
 
 def resolve_files(patterns):
     """
@@ -58,7 +51,7 @@ def main():
     parser.add_argument("--log", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"], help="Set the logging level.")
     
     args = parser.parse_args()
-    setup_logging(args.log)
+    setup_logging("mklib", level_name=args.log)
     logger = logging.getLogger("mklib")
     
     # Handle library clearing

@@ -16,14 +16,7 @@ if project_root not in sys.path:
 from pmosaic.io import load_image
 from pmosaic.color import extract_target_cell_vec
 from pmosaic.utils import safe_resize
-
-def setup_logging(level_name):
-    level = getattr(logging, level_name.upper(), logging.INFO)
-    logging.basicConfig(
-        level=level,
-        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        handlers=[logging.StreamHandler(sys.stdout)]
-    )
+from pmosaic.logging_setup import setup_logging
 
 def load_library_records(libfiles_str):
     """
@@ -104,7 +97,7 @@ def main():
     parser.add_argument("--log", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"], help="Set the logging level.")
     
     args = parser.parse_args()
-    setup_logging(args.log)
+    setup_logging("mkpic", level_name=args.log)
     logger = logging.getLogger("mkpic")
     
     # 1. Load library data
