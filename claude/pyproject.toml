@@ -1,0 +1,19 @@
+[project]
+name = "pmosaic-claude"
+version = "0.1.0"
+description = "Photomosaic generator: index an image library, then build a mosaic of a target image."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy>=2.0",
+    "pillow>=10.0",
+    "pillow-heif>=0.16",
+    "rawpy>=0.21",
+]
+
+[tool.setuptools.packages.find]
+include = ["pmosaic*"]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
